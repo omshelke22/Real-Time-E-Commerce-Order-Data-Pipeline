@@ -1,0 +1,50 @@
+version: "3"
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: ed-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: ed-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT:
+        ed-zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS:
+        PLAINTEXT://ed-kafka:29092,
+        PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP:
+        PLAINTEXT:PLAINTEXT,
+        PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  mysql:
+    image: mysql:8
+    container_name: ed-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ecommerce_db
+    volumes:
+
+      - mysql_data:/var/lib/mysql
+  pyspark:
+    image: jupyter/pyspark-notebook
+    container_name: ed-pyspark
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./spark:/home/jovyan/work
+    depends_on:
+      - kafka
+      - mysql
+volumes:
+  mysql_data:

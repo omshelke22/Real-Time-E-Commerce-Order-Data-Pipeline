@@ -1,0 +1,7 @@
+├── 01_docker_containers.png
+├── 02_kafka_topic.png
+├── 03_kafka_producer.png
+├── 04_kafka_consumer.png
+├── 05_project_schema.png
+├── 06_pipeline_architecture.png
+└── 07_project_structure.png
