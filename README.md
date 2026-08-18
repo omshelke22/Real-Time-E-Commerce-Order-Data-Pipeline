@@ -56,9 +56,7 @@ MySQL
 ## Hoto Run
 
 
-1. Start Dker services
-
-cker compose up -d
+1. Start Docker services:docker compose up -d
 
 2. Create Kafka topic
 
